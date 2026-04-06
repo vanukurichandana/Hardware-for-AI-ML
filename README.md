@@ -6,8 +6,6 @@
 
 ---
 
-## Project Description
+This project focuses on designing a hardware accelerator for a neural network linear layer. The design performs matrix multiplication using multiply-and-accumulate (MAC) operations, which are widely used in AI workloads.
 
-This project designs a hardware accelerator for a neural network linear layer. The accelerator performs matrix multiplication using multiply-and-accumulate (MAC) operations, which are common in AI workloads.
-
-The goal is to improve performance compared to software by using a custom hardware design. The accelerator will be connected to a host system through an AXI4-Lite interface, allowing the host to send inputs, control execution, and read results.
+The goal is to improve performance compared to software by using a custom hardware design. The accelerator will be connected to a host system through an AXI4-Lite interface for control and data transfer.
