@@ -1,8 +1,8 @@
-Project: Hardware Accelerator for Transformer Self-Attention Inference
+**Project: Hardware Accelerator for Transformer Self-Attention Inference**
 
 
 
-Question 1: What are you trying to do?
+**Question 1: What are you trying to do?**
 
 
 
@@ -10,7 +10,7 @@ I am designing a hardware accelerator for transformer self-attention inference. 
 
 
 
-Question 2: How is it done today, and what are the limits of current practice?
+**Question 2: How is it done today, and what are the limits of current practice?**
 
 
 
@@ -18,7 +18,7 @@ Currently, transformer inference is executed on CPUs, GPUs, or cloud-based syste
 
 
 
-Question 3: What is new in your approach and why do you think it will be successful?
+**Question 3: What is new in your approach and why do you think it will be successful?**
 
 
 
