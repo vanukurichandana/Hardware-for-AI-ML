@@ -14,7 +14,15 @@ I am designing a hardware accelerator for transformer self-attention inference. 
 
 
 
-Currently, transformer inference is executed on CPUs, GPUs, or cloud-based systems. While these platforms provide strong computational power, they are not optimized for the dataflow and memory access patterns of self-attention. As sequence length increases, matrix computations and memory movement grow significantly, leading to higher latency and increased energy consumption. This makes efficient deployment challenging, especially in edge or resource-constrained environments.
+Currently, transformer inference is executed on CPUs, GPUs, or cloud-based systems. While these platforms provide strong computational capability, they are not optimized for the dataflow and memory access patterns of self-attention.
+
+
+
+From profiling results of the software baseline, the function `run\_attention` takes a cumulative time of approximately 0.539 seconds across 10 runs, with an average execution time of 0.0539 seconds per run. The dominant computations within this function are matrix multiplications, specifically Q × Kᵀ and Attention × V.
+
+
+
+These operations involve high computational complexity and repeated data movement, especially as sequence length increases. This leads to increased latency, higher energy consumption, and inefficient utilization of compute resources on general-purpose processors. As a result, deploying transformer models efficiently in edge or resource-constrained environments remains challenging.
 
 
 
