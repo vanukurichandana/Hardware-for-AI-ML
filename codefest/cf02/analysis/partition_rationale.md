@@ -1,39 +1,70 @@
-# HW/SW Partition Proposal
+## Partition Rationale
+
 ## Project: Hardware Accelerator for Transformer Self-Attention Inference
 
 ---
 
 ## (a) Which Kernel(s) to Accelerate in Hardware — Roofline Justification
 
-The kernel selected for hardware acceleration is the **scaled dot-product attention core**: specifically the QKᵀ matrix multiplication and the AV attention-weighted sum. These two operations consume 74.5% of total runtime and scale quadratically with sequence length (O(T²·d)), making them the clear performance bottleneck.
+The kernel selected for hardware acceleration is the **scaled dot-product attention core**, specifically the Q × Kᵀ matrix multiplication and the Attention × V computation. From profiling results, the `run_attention` function takes a cumulative time of **0.539 seconds across 10 runs**, indicating that these matrix multiplication operations dominate execution time.
 
-On the target software platform (Apple M2 Pro, peak compute ≈ 3,600 GFLOP/s, peak memory bandwidth ≈ 200 GB/s, ridge point = 18.0 FLOP/byte), the dominant kernel sits at an arithmetic intensity of **42.67 FLOP/byte** — above the ridge point, placing it in the **compute-bound** region. The attainable performance is capped at 3,600 GFLOP/s, which is the full peak. However, this ceiling is a hardware peak, not what is actually achieved in NumPy: the measured throughput is far below peak due to Python overhead, lack of SIMD utilization in loop control paths, and poor memory locality across the multi-head loop structure.
+These kernels are computationally intensive and involve repeated multiply-and-accumulate (MAC) operations. For the given configuration (T = 64, d = 64), the arithmetic intensity is **10.67 FLOP/byte**.
 
-The roofline analysis therefore supports acceleration on two grounds: (1) the kernel is already theoretically compute-bound, meaning a higher-throughput compute engine directly improves attainable performance, and (2) the NumPy baseline cannot approach the theoretical ceiling, so a custom datapath with fused multiply-accumulate units and tiled execution will unlock the headroom.
+Based on roofline analysis, this arithmetic intensity places the kernel in the **compute-bound region**, meaning performance is limited by available compute throughput rather than memory bandwidth. Therefore, accelerating these kernels using custom hardware can directly improve performance by increasing parallelism and compute efficiency.
 
 ---
 
 ## (b) What Software Will Continue to Handle
 
-The software baseline retains responsibility for: tokenization and embedding lookup, positional encoding, layer normalization, feed-forward sublayer (two dense projections with GeLU), output linear projection and vocabulary softmax for language model heads, and the overall inference orchestration (batching, KV-cache management, scheduling). These operations either have lower arithmetic intensity (e.g., layer norm is memory-bound and not on the critical path for long sequences), or their structure is irregular enough that hardware acceleration offers diminishing returns relative to implementation complexity.
+The software will handle the following components:
+- Input generation and preprocessing
+- Linear projections for Q, K, and V
+- Softmax computation
+- Control and sequencing of operations
+
+These components involve less computational intensity or irregular operations, making them less suitable for hardware acceleration compared to matrix multiplication.
 
 ---
 
 ## (c) Interface Bandwidth Requirement
 
-At a target throughput of 100 inference sequences per second (T=512, d=512), the accelerator must move approximately **12.58 MB of data** (Q, K, V matrices and output) per sequence:
+For the current configuration (B = 1, T = 64, d = 64), the data movement per attention computation includes Q, K, V matrices and output tensors.
 
-```
-Required BW = 100 seq/s × 12,582,912 bytes/seq = 1,258,291,200 bytes/s ≈ 1.26 GB/s
-```
+Total data transferred per run:
 
-**AXI4 Stream** (512-bit wide at 250 MHz) provides approximately **16 GB/s** of sustained throughput — more than 12× the required bandwidth. This ensures the accelerator will **not** be interface-bound at the target operating point. PCIe 4.0 x4 (8 GB/s rated) would also be sufficient. AXI4 Stream is preferred here because it is well-suited for streaming matrix data with minimal protocol overhead, integrates cleanly with FPGA SoC fabric, and matches the sequential, pipelined dataflow of the attention computation.
+- Q = 64 × 64 × 4 bytes = 16,384 bytes  
+- K = 64 × 64 × 4 bytes = 16,384 bytes  
+- V = 64 × 64 × 4 bytes = 16,384 bytes  
+- Output = 64 × 64 × 4 bytes = 16,384 bytes  
+
+Total ≈ **65,536 bytes per run**
+
+Using the measured execution time (0.0539 seconds per run):
+
+Required bandwidth:
+
+Required BW = 65,536 / 0.0539 ≈ **1.21 MB/s**
+
+The chosen interface is **AXI4-Stream** with:
+- 256-bit data width
+- 250 MHz clock frequency
+
+Provided bandwidth:
+
+Bandwidth = 256 bits × 250 MHz  
+= 64 Gbit/s  
+= **8 GB/s**
+
+Since the available bandwidth (8 GB/s) is significantly higher than the required bandwidth (1.21 MB/s), the design is **not interface-bound**.
 
 ---
 
 ## (d) Bound Classification and Expected Change with HW Design
 
-On the current CPU platform, the kernel is theoretically **compute-bound** (AI = 42.67 FLOP/byte > ridge point = 18.0 FLOP/byte). In practice, the software implementation underperforms the theoretical ceiling due to Python/NumPy overhead.
+On the current CPU platform, the kernel is **compute-bound**, as indicated by its arithmetic intensity (10.67 FLOP/byte).
 
-The hypothetical hardware accelerator is designed with a peak compute of **50 TFLOPS** and an on-chip SRAM bandwidth of **2 TB/s**, yielding a ridge point of **25.0 FLOP/byte**. Since the kernel's arithmetic intensity (42.67 FLOP/byte) exceeds this new ridge point, the kernel **remains compute-bound** on the accelerator as well. This is the desired outcome: it means the accelerator's compute throughput (50 TFLOPS) is the active ceiling, and the design achieves a theoretical speedup of approximately **50,000 / 3,600 ≈ 13.9×** over the CPU peak — and far greater over the measured NumPy baseline. On-chip SRAM with 2 TB/s bandwidth ensures data can be fed to the MAC array without starvation, keeping the systolic array fully utilized.
+The proposed hardware accelerator increases parallelism using dedicated MAC units and optimized dataflow. With improved compute throughput, the performance ceiling shifts upward.
 
+Since the arithmetic intensity remains unchanged and is above the ridge point of the system, the kernel will **remain compute-bound** even after acceleration. This is desirable because it ensures that performance improvements come directly from increased compute capability rather than being limited by memory bandwidth.
+
+Overall, accelerating the dominant matrix multiplication kernels is expected to significantly improve throughput and reduce execution latency.
