@@ -56,5 +56,3 @@ By leveraging parallel computation and optimizing on-chip data movement, the pro
 
 This approach is expected to achieve lower latency and better energy efficiency compared to software-based implementations on general-purpose platforms, making it a promising solution for efficient transformer inference.
 
-
-
