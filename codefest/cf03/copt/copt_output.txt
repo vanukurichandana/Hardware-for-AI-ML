@@ -1,0 +1,21 @@
+CUDA GPU detected: Tesla T4
+CUDA version     : 12.8
+PyTorch version  : 2.10.0+cu128
+ 
+Model architecture:
+Sequential(
+  (0): Linear(in_features=4, out_features=5, bias=True)
+  (1): ReLU()
+  (2): Linear(in_features=5, out_features=1, bias=True)
+)
+Model is on device: cuda:0
+ 
+Input tensor shape : [16, 4]
+Input tensor device: cuda:0
+ 
+Output tensor shape : [16, 1]
+Output tensor device: cuda:0
+ 
+Output shape confirmed: [16, 1]
+Output confirmed on GPU: cuda:0
+ 
