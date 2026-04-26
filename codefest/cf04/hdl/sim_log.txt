@@ -1,5 +1,7 @@
 # Reading C:/intelFPGA/18.1/modelsim_ase/tcl/vsim/pref.tcl
 cd "C:/Users/vanuk/OneDrive/Documents/ECE-PSU/Term5 Spring 2026/Hardware-for-AI-ML/codefest/cf04/hdl"
+# reading C:/intelFPGA/18.1/modelsim_ase/win32aloem/../modelsim.ini
+vlib work
 vlog -sv mac_correct.v
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
 # Start time: 15:56:55 on Apr 26,2026
@@ -26,6 +28,7 @@ vsim mac_tb
 # Loading sv_std.std
 # Loading work.mac_tb
 # Loading work.mac
+# WARNING: No extended dataflow license exists
 run -all
 # Cycle 1 output = 12
 # Cycle 2 output = 24
