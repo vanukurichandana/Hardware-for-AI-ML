@@ -1,0 +1,39 @@
+# Reading C:/intelFPGA/18.1/modelsim_ase/tcl/vsim/pref.tcl
+cd "C:/Users/vanuk/OneDrive/Documents/ECE-PSU/Term5 Spring 2026/Hardware-for-AI-ML/codefest/cf04/hdl"
+vlog -sv mac_correct.v
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 15:56:55 on Apr 26,2026
+# vlog -reportprogress 300 -sv mac_correct.v 
+# -- Compiling module mac
+# 
+# Top level modules:
+# 	mac
+# End time: 15:56:55 on Apr 26,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog -sv mac_tb.v
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 15:56:55 on Apr 26,2026
+# vlog -reportprogress 300 -sv mac_tb.v 
+# -- Compiling module mac_tb
+# 
+# Top level modules:
+# 	mac_tb
+# End time: 15:56:55 on Apr 26,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vsim mac_tb
+# vsim mac_tb 
+# Start time: 15:57:00 on Apr 26,2026
+# Loading sv_std.std
+# Loading work.mac_tb
+# Loading work.mac
+run -all
+# Cycle 1 output = 12
+# Cycle 2 output = 24
+# Cycle 3 output = 36
+# After reset output = 0
+# Negative cycle 1 output = -10
+# Negative cycle 2 output = -20
+# ** Note: $finish    : mac_tb.v(63)
+#    Time: 66 ns  Iteration: 0  Instance: /mac_tb
+# 1
+# Break in Module mac_tb at mac_tb.v line 63

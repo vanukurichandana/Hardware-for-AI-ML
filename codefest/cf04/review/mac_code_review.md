@@ -77,8 +77,17 @@ run -all
 #    Time: 66 ns  Iteration: 0  Instance: /mac_tb
 ```
 
-mac_correct.v passes all testbench cases correctly.
-All 6 output values match expected results — accumulation, reset, and negative multiplication verified.
+The simulation confirms that mac_correct.v behaves correctly across all
+test cases. In the first phase, with inputs a=3 and b=4 applied for three
+consecutive clock cycles, the accumulator correctly produces 12, 24, and
+36 — demonstrating that the MAC accumulates the product 3×4=12 on each
+rising edge. When reset is asserted, the output immediately clears to
+zero on the next clock edge, confirming synchronous active-high reset
+behavior. In the second phase, with a=-5 and b=2, the accumulator
+correctly produces -10 and -20, verifying that signed multiplication and
+sign extension are handled correctly for negative operands. All six output
+values match the expected results, confirming that the design is
+functionally correct for both positive and negative INT8 inputs.
 
 ---
 
@@ -140,14 +149,16 @@ outputs:
 
 ### Change 1 — Explicit intermediate product register added
 ```systemverilog
-// Added (not present in either LLM output):
 logic signed [15:0] product;
 assign product = a * b;
 ```
 A named 16-bit signed wire `product` is declared and driven by a
 continuous `assign`. This makes the 16-bit intermediate result visible
 and named, improving readability and making the sign extension step
-unambiguous.
+unambiguous. Neither LLM output included this intermediate signal —
+both computed the product inline inside the always_ff block, which
+hides the bit-width of the intermediate result from the reader and
+leaves sign extension behavior implicit.
 
 ### Change 2 — Manual sign extension via concatenation
 ```systemverilog
@@ -163,16 +174,82 @@ out <= out + {{16{product[15]}}, product};
 The expression `{{16{product[15]}}, product}` manually replicates the
 sign bit (`product[15]`) 16 times and concatenates it with the 16-bit
 product to form a correct 32-bit signed value. This is the most explicit
-and tool-independent way to sign-extend in synthesizable SystemVerilog —
-no reliance on implicit promotion rules or cast behavior.
+and tool-independent method of sign extension in synthesizable
+SystemVerilog. It does not rely on implicit promotion rules or cast
+behavior, and its correctness can be verified by inspection without
+needing to know how a particular synthesis tool handles mixed-width
+arithmetic. This makes the design more robust and easier to review
+compared to both LLM outputs.
 
-### Summary of changes
+### Summary of Changes
+
+The table below compares the three implementations across key design
+aspects. LLM A relies on implicit sign extension which is tool-dependent
+and risky for negative operands. LLM B improves on this with an explicit
+cast but still computes the product inline. mac_correct.v goes furthest
+by naming the intermediate product, making the bit width visible, and
+using manual bit replication for sign extension — ensuring correct and
+predictable behavior across all synthesis tools. Both LLM outputs use
+always_ff correctly with active-high synchronous reset, which matches
+the specification, and mac_correct.v preserves these correct behaviors
+while fixing the sign extension weakness.
 
 | Aspect | LLM A | LLM B | mac_correct.v |
 |--------|-------|-------|---------------|
-| Sign extension | Implicit (ambiguous) | `32'($signed(...))` cast | Manual `{{16{...}}, product}` |
-| Intermediate wire | None | None | `logic signed [15:0] product` |
-| Synthesizability | Compiles, may fail | Correct | Correct, most explicit |
-| Reset behavior | Active-high ✅ | Active-high ✅ | Active-high ✅ |
-| `always_ff` used | ✅ | ✅ | ✅ |
+| Sign extension | Implicit, tool-dependent | Explicit cast `32'($signed(...))` | Manual bit replication `{{16{...}}, product}` |
+| Intermediate wire | Not declared | Not declared | Declared as `logic signed [15:0] product` |
+| Synthesizability | Compiles but may produce wrong results for negative inputs | Correct and portable | Correct, most explicit and tool-independent |
+| Reset behavior | Active-high synchronous, correct per spec | Active-high synchronous, correct per spec | Active-high synchronous, correct per spec |
+| always_ff usage | Used correctly | Used correctly | Used correctly |
 
+
+---
+
+## Yosys Synthesis Output (mac_correct.v)
+
+**Command:** `yosys -p 'read_verilog -sv mac_correct.v; synth; stat'`
+**Tool:** Yosys 0.9 (git sha1 1979e0b) — Google Colab
+
+```
+=== mac ===
+
+   Number of wires:                607
+   Number of wire bits:            683
+   Number of public wires:           5
+   Number of public wire bits:      50
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                665
+     $_ANDNOT_                     143
+     $_AND_                         61
+     $_AOI3_                        62
+     $_DFF_P_                       32
+     $_MUX_                          1
+     $_NAND_                        22
+     $_NOR_                         23
+     $_NOT_                         32
+     $_OAI3_                        24
+     $_ORNOT_                       18
+     $_OR_                          33
+     $_XNOR_                        64
+     $_XOR_                        150
+
+found and reported 0 problems.
+CPU: user 0.47s system 0.02s, MEM: 20.09 MB total
+```
+
+The synthesis completed with 0 errors and 0 problems, confirming that
+mac_correct.v is fully synthesizable. The stat output shows the design
+maps to 665 standard cells after technology mapping. The most notable
+result is the presence of exactly 32 `$_DFF_P_` flip-flops, which
+corresponds precisely to the 32-bit output accumulator register `out` —
+one flip-flop per bit, as expected for a registered accumulator. The
+multiplier logic (INT8 × INT8 = 16-bit product) is implemented using a
+combination of XOR, XNOR, AND, and carry-chain cells, which is the
+standard gate-level representation of a combinational multiplier. The
+single `$_MUX_` cell corresponds to the reset mux that selects between
+zero (when rst=1) and the accumulated value (when rst=0). The absence
+of any memory cells and processes confirms the design is purely
+combinational and sequential logic with no latches or unsynthesizable
+constructs.
