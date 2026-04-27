@@ -4,4 +4,6 @@ VERILOG_SOURCES = $(PWD)/mac_correct.v
 TOPLEVEL = mac
 MODULE = test_mac
 
+WAVES = 1
+
 include $(shell cocotb-config --makefiles)/Makefile.sim
