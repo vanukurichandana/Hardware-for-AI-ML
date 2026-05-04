@@ -1,0 +1,53 @@
+# Reading C:/intelFPGA/18.1/modelsim_ase/tcl/vsim/pref.tcl
+cd "C:/Users/vanuk/OneDrive/Documents/ECE-PSU/Term5 Spring 2026/Hardware-for-AI-ML/project/m2"
+vlog -sv rtl/mac_unit.sv
+# -- Compiling module mac_unit
+# Errors: 0, Warnings: 0
+vlog -sv rtl/scale_unit.sv
+# -- Compiling module scale_unit
+# Errors: 0, Warnings: 0
+vlog -sv rtl/relu_approx.sv
+# -- Compiling module relu_approx
+# Errors: 0, Warnings: 0
+vlog -sv rtl/av_unit.sv
+# -- Compiling module av_unit
+# Errors: 0, Warnings: 0
+vlog -sv rtl/compute_core.sv
+# -- Compiling module compute_core
+# Errors: 0, Warnings: 0
+vlog -sv tb/tb_compute_core.sv
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 17:23:55 on May 03,2026
+# -- Compiling module tb_compute_core
+# Top level modules:
+#     tb_compute_core
+# End time: 17:23:55 on May 03,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vsim tb_compute_core
+# vsim tb_compute_core
+# Start time: 17:23:55 on May 03,2026
+# Loading sv_std.std
+# Loading work.tb_compute_core
+# Loading work.compute_core
+# Loading work.mac_unit
+# Loading work.scale_unit
+# Loading work.relu_approx
+# Loading work.av_unit
+run -all
+# === compute_core Testbench ===
+# Pipeline: QKT -> Scale(>>3) -> ReLU -> AV
+# Input: q=[3,-2,5,1] k=[4,7,2,6] v=[2,3,1,-1]
+# Cycle 1: q=3 k=4 v=2 seq_last=0
+# Cycle 2: q=-2 k=7 v=3 seq_last=0
+# Cycle 3: q=5 k=2 v=1 seq_last=0
+# Cycle 4: q=1 k=6 v=-1 seq_last=1
+# attn_out = 0, valid_out = 0
+# PASS: Reset cleared attn_out to 0
+# PASS: Positive inputs produce non-negative output = 0
+# PASS: Negative QKT clipped to 0 by ReLU softmax approx
+# ==============================
+# Tests: 3 PASS, 0 FAIL
+# OVERALL: PASS
+# ==============================
+# ** Note: $finish    : tb/tb_compute_core.sv(206)
+#    Time: 296 ns  Iteration: 0  Instance: /tb_compute_core
