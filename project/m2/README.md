@@ -58,6 +58,29 @@ run -all
 ```
 Expected: `OVERALL: PASS` (4/4 tests) | Log: `sim/interface_run.log`
 
+### Step 5 — View waveform
+```
+vsim tb_compute_core
+add wave -divider "INPUTS"
+add wave /tb_compute_core/clk
+add wave /tb_compute_core/rst
+add wave /tb_compute_core/q_in
+add wave /tb_compute_core/k_in
+add wave /tb_compute_core/v_in
+add wave /tb_compute_core/valid_in
+add wave /tb_compute_core/seq_last
+add wave -divider "PIPELINE"
+add wave /tb_compute_core/dut/mac_accum
+add wave /tb_compute_core/dut/scaled_data
+add wave /tb_compute_core/dut/relu_data
+add wave -divider "OUTPUT"
+add wave /tb_compute_core/attn_out
+add wave /tb_compute_core/valid_out
+run -all
+wave zoom full
+```
+Screenshot saved as: `sim/waveform.png`
+
 ---
 
 ## Deviations from M1 Plan
