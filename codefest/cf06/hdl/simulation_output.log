@@ -1,0 +1,41 @@
+# Reading C:/intelFPGA/18.1/modelsim_ase/tcl/vsim/pref.tcl
+cd "C:/Users/vanuk/OneDrive/Documents/ECE-PSU/Term5 Spring 2026/Hardware-for-AI-ML/codefest/cf06"
+vlog -sv hdl/crossbar_mac.sv
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# -- Compiling module crossbar_mac
+# Errors: 0, Warnings: 0
+vlog -sv hdl/crossbar_tb.sv
+# -- Compiling module crossbar_tb
+# Errors: 0, Warnings: 0
+vsim crossbar_tb
+# vsim crossbar_tb
+# Start time: 11:51:42 on May 10,2026
+# Loading sv_std.std
+# Loading work.crossbar_tb
+# Loading work.crossbar_mac
+run -all
+# === crossbar_mac Testbench ===
+# Weight matrix:
+#   W = [[ 1,-1, 1,-1],
+#        [ 1, 1,-1,-1],
+#        [-1, 1, 1,-1],
+#        [-1,-1,-1, 1]]
+# Input: in = [10, 20, 30, 40]
+# Weights loaded.
+# Simulation outputs:
+#   out[0] = -40 (expected -40)
+#   out[1] = 0 (expected 0)
+#   out[2] = -20 (expected -20)
+#   out[3] = -20 (expected -20)
+# PASS: out[0] = -40
+# PASS: out[1] = 0
+# PASS: out[2] = -20
+# PASS: out[3] = -20
+# ==============================
+# Tests: 4 PASS, 0 FAIL
+# OVERALL: PASS
+# ==============================
+# ** Note: $finish    : hdl/crossbar_tb.sv(164)
+#    Time: 46 ns  Iteration: 0  Instance: /crossbar_tb
+# 1
+# Break in Module crossbar_tb at hdl/crossbar_tb.sv line 164
