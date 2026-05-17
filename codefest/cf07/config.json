@@ -1,0 +1,6 @@
+{
+    "DESIGN_NAME": "synth_top",
+    "VERILOG_FILES": ["dir::hdl/synth_top.sv", "dir::hdl/mac_unit.sv", "dir::hdl/scale_unit.sv", "dir::hdl/relu_approx.sv", "dir::hdl/av_unit.sv"],
+    "CLOCK_PORT": "clk",
+    "CLOCK_PERIOD": 10.0
+}
