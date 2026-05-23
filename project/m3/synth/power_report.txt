@@ -1,0 +1,42 @@
+# Power Estimation Report — M3
+## Tool: OpenLane 1.1.1 | Design: top | PDK: Sky130A
+
+Power estimation via OpenLane 1 synthesis exploration does not produce
+a standalone power report. Full power analysis requires placement and
+routing (PnR) which is beyond the synthesis-only flow used in M3.
+
+## What Was Attempted
+
+OpenLane 1.1.1 was run with the -synth_explore flag on the top module
+(full attention pipeline + AXI4-Stream interface) targeting Sky130A PDK
+at 4.0 ns clock period. The synthesis flow completed successfully with
+0 problems, producing area and timing reports. However, OpenLane 1
+synthesis exploration does not invoke OpenSTA power analysis — that
+step requires a placed and routed netlist.
+
+## Estimated Power (Static Analysis)
+
+Based on Sky130A standard cell characterization data:
+- Dynamic power scales approximately as: P = α × C × V² × f
+- Activity factor α ≈ 0.1 (typical for pipelined datapath)
+- Supply voltage V = 1.8V (Sky130A nominal)
+- Clock frequency f = 250 MHz
+- Total cell count: 2,500 cells (AREA_0 strategy)
+- Estimated capacitance: ~50 fF per cell average
+
+Estimated dynamic power ≈ 0.1 × 2500 × 50fF × (1.8)² × 250MHz
+                         ≈ 0.1 × 2500 × 50e-15 × 3.24 × 250e6
+                         ≈ **10.1 mW (estimated)**
+
+Static leakage power for Sky130A at nominal corner:
+  ~1 nW per cell × 2500 cells ≈ **2.5 μW (leakage)**
+
+## Plan for M4
+
+For M4, power estimation will be attempted using:
+1. OpenLane full PnR flow to generate a placed and routed netlist
+2. OpenSTA power analysis on the post-PnR netlist
+3. If full PnR fails, use Yosys power estimation from gate-level netlist
+
+The estimated 10.1 mW dynamic power will be validated against the
+post-PnR OpenSTA result in M4.

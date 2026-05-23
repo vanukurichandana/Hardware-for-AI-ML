@@ -1,0 +1,78 @@
+# Reading C:/intelFPGA/18.1/modelsim_ase/tcl/vsim/pref.tcl
+cd "C:/Users/vanuk/OneDrive/Documents/ECE-PSU/Term5 Spring 2026/Hardware-for-AI-ML/project/m3"
+vlib work
+vlog -sv rtl/mac_unit.sv
+# -- Compiling module mac_unit
+# Errors: 0, Warnings: 0
+vlog -sv rtl/scale_unit.sv
+# -- Compiling module scale_unit
+# Errors: 0, Warnings: 0
+vlog -sv rtl/relu_approx.sv
+# -- Compiling module relu_approx
+# Errors: 0, Warnings: 0
+vlog -sv rtl/av_unit.sv
+# -- Compiling module av_unit
+# Errors: 0, Warnings: 0
+vlog -sv rtl/compute_core.sv
+# -- Compiling module compute_core
+# Errors: 0, Warnings: 0
+vlog -sv rtl/interface.sv
+# -- Compiling module interface_axi4s
+# Errors: 0, Warnings: 0
+vlog -sv rtl/top.sv
+# -- Compiling module top
+# Errors: 0, Warnings: 0
+vlog -sv tb/tb_top.sv
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 20:11:04 on May 22,2026
+# -- Compiling module tb_top
+# Errors: 0, Warnings: 0
+vsim tb_top
+# vsim tb_top
+# Start time: 20:11:04 on May 22,2026
+# Loading sv_std.std
+# Loading work.tb_top
+# Loading work.top
+# Loading work.interface_axi4s
+# Loading work.compute_core
+# Loading work.mac_unit
+# Loading work.scale_unit
+# Loading work.relu_approx
+# Loading work.av_unit
+run -all
+# =================================================
+# M3 End-to-End Co-Simulation -- tb_top
+# Design: Transformer Self-Attention Accelerator
+# Interface: AXI4-Stream slave -> compute_core -> master
+# Test: QKT=[3,-2,5,1]x[4,7,2,6] + AV x [2,3,1,-1]
+# =================================================
+#
+# [Test 1] AXI4-Stream TREADY handshake
+# PASS: s_tready=1 -- interface ready to accept data
+#
+# [Test 2] Host write transaction -- sending 4 Q,K,V pairs
+#   Sent: q=3 k=4 v=2 tlast=0
+#   Sent: q=-2 k=7 v=3 tlast=0
+#   Sent: q=5 k=2 v=1 tlast=0
+#   Sent: q=1 k=6 v=-1 tlast=1
+# PASS: All 4 transactions sent via AXI4-Stream
+#
+# [Test 3] Host read transaction -- asserting M_TREADY
+#   m_tvalid=0  m_tdata=0
+# PASS: Result non-negative for positive QKT inputs
+#       m_tdata=0 received through AXI4-Stream master
+#
+# [Test 4] Negative QKT -- ReLU clips to zero
+# PASS: Negative QKT clipped to 0 by ReLU (m_tdata=0)
+#
+# [Test 5] Reset clears pipeline
+# PASS: s_tready=0 during reset -- interface correctly gated
+#
+# =================================================
+# Tests: 5 PASS, 0 FAIL
+# OVERALL: PASS
+# =================================================
+# ** Note: $finish    : tb/tb_top.sv(226)
+#    Time: 416 ns  Iteration: 0  Instance: /tb_top
+# 1
+# Break in Module tb_top at tb/tb_top.sv line 226

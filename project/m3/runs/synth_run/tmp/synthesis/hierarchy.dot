@@ -1,0 +1,24 @@
+digraph "top" {
+label="top";
+rankdir="LR";
+remincross=true;
+n1 [ shape=octagon, label="m_tdata", color="black", fontcolor="black" ];
+n2 [ shape=octagon, label="m_tready", color="black", fontcolor="black" ];
+n3 [ shape=octagon, label="m_tvalid", color="black", fontcolor="black" ];
+n4 [ shape=octagon, label="s_tlast", color="black", fontcolor="black" ];
+n5 [ shape=octagon, label="s_tdata", color="black", fontcolor="black" ];
+n6 [ shape=octagon, label="s_tready", color="black", fontcolor="black" ];
+n7 [ shape=octagon, label="s_tvalid", color="black", fontcolor="black" ];
+n8 [ shape=octagon, label="rst", color="black", fontcolor="black" ];
+n9 [ shape=octagon, label="clk", color="black", fontcolor="black" ];
+c10 [ shape=record, label="{{<p9> clk|<p2> m_tready|<p8> rst|<p5> s_tdata|<p4> s_tlast|<p7> s_tvalid}|u_interface\n$paramod$d7cdc7a86a89773c3f58cbd3e674af93a8edce42&#9586;interface_axi4s|{<p1> m_tdata|<p3> m_tvalid|<p6> s_tready}}",  ];
+c10:p1:e -> n1:w [color="black", fontcolor="black", style="setlinewidth(3)", label=""];
+n2:e -> c10:p2:w [color="black", fontcolor="black", label=""];
+c10:p3:e -> n3:w [color="black", fontcolor="black", label=""];
+n4:e -> c10:p4:w [color="black", fontcolor="black", label=""];
+n5:e -> c10:p5:w [color="black", fontcolor="black", style="setlinewidth(3)", label=""];
+c10:p6:e -> n6:w [color="black", fontcolor="black", label=""];
+n7:e -> c10:p7:w [color="black", fontcolor="black", label=""];
+n8:e -> c10:p8:w [color="black", fontcolor="black", label=""];
+n9:e -> c10:p9:w [color="black", fontcolor="black", label=""];
+}
