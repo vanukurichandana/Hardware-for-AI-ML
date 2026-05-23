@@ -1,0 +1,42 @@
+%Warning-EOFNEWLINE: /design/rtl/top.sv:75:10: Missing newline at end of file (POSIX 3.206).
+                                             : ... Suggest add newline.
+   75 | endmodule
+      |          ^
+                     ... For warning description see https://verilator.org/warn/EOFNEWLINE?v=5.018
+                     ... Use "/* verilator lint_off EOFNEWLINE */" and lint_on around source to disable this message.
+%Warning-EOFNEWLINE: /design/rtl/interface.sv:117:10: Missing newline at end of file (POSIX 3.206).
+                                                    : ... Suggest add newline.
+  117 | endmodule
+      |          ^
+%Warning-EOFNEWLINE: /design/rtl/compute_core.sv:114:10: Missing newline at end of file (POSIX 3.206).
+                                                       : ... Suggest add newline.
+  114 | endmodule
+      |          ^
+%Warning-EOFNEWLINE: /design/rtl/mac_unit.sv:62:10: Missing newline at end of file (POSIX 3.206).
+                                                  : ... Suggest add newline.
+   62 | endmodule
+      |          ^
+%Warning-EOFNEWLINE: /design/rtl/scale_unit.sv:46:10: Missing newline at end of file (POSIX 3.206).
+                                                    : ... Suggest add newline.
+   46 | endmodule
+      |          ^
+%Warning-EOFNEWLINE: /design/rtl/relu_approx.sv:50:10: Missing newline at end of file (POSIX 3.206).
+                                                     : ... Suggest add newline.
+   50 | endmodule
+      |          ^
+%Warning-EOFNEWLINE: /design/rtl/av_unit.sv:59:10: Missing newline at end of file (POSIX 3.206).
+                                                 : ... Suggest add newline.
+   59 | endmodule
+      |          ^
+%Warning-UNUSEDPARAM: /design/rtl/top.sv:38:19: Parameter is not used: 'HEAD_DIM'
+                                              : ... note: In instance 'top'
+   38 |     parameter int HEAD_DIM    = 64,
+      |                   ^~~~~~~~
+%Warning-UNUSEDPARAM: /design/rtl/top.sv:39:19: Parameter is not used: 'SCALE_SHIFT'
+                                              : ... note: In instance 'top'
+   39 |     parameter int SCALE_SHIFT = 3
+      |                   ^~~~~~~~~~~
+%Warning-UNUSEDPARAM: /design/rtl/compute_core.sv:33:19: Parameter is not used: 'HEAD_DIM'
+                                                       : ... note: In instance 'top.u_interface.u_compute_core'
+   33 |     parameter int HEAD_DIM    = 64,
+      |                   ^~~~~~~~

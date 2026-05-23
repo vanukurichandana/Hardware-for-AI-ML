@@ -1,42 +1,57 @@
-# Power Estimation Report — M3
-## Tool: OpenLane 1.1.1 | Design: top | PDK: Sky130A
+# Power Report — M3 Full PnR Flow
+## Tool: OpenLane 1.1.1 | Design: top | PDK: Sky130A (bdc9412b)
+## Flow: Full Place-and-Route (44 steps completed)
+## Source: project/m3/runs/full_run/reports/metrics.csv
 
-Power estimation via OpenLane 1 synthesis exploration does not produce
-a standalone power report. Full power analysis requires placement and
-routing (PnR) which is beyond the synthesis-only flow used in M3.
+---
 
-## What Was Attempted
+## Power Estimation Results (from OpenSTA post-PnR analysis)
 
-OpenLane 1.1.1 was run with the -synth_explore flag on the top module
-(full attention pipeline + AXI4-Stream interface) targeting Sky130A PDK
-at 4.0 ns clock period. The synthesis flow completed successfully with
-0 problems, producing area and timing reports. However, OpenLane 1
-synthesis exploration does not invoke OpenSTA power analysis — that
-step requires a placed and routed netlist.
+Power analysis was performed by OpenLane 1.1.1 using SPEF extraction
+and multi-corner static timing analysis on the fully placed and routed
+netlist. Results are from the nominal (typical) process corner at 1.8V.
 
-## Estimated Power (Static Analysis)
+| Power Component | Slowest Corner | Typical Corner | Fastest Corner |
+|----------------|---------------|---------------|----------------|
+| Internal power | 2.69 mW | 3.40 mW | 3.90 mW |
+| Switching power | 1.38 mW | 1.78 mW | 2.11 mW |
+| Leakage power | 0.013 µW | 0.015 µW | 0.025 µW |
+| **Total power** | **4.07 mW** | **5.18 mW** | **6.01 mW** |
 
-Based on Sky130A standard cell characterization data:
-- Dynamic power scales approximately as: P = α × C × V² × f
-- Activity factor α ≈ 0.1 (typical for pipelined datapath)
-- Supply voltage V = 1.8V (Sky130A nominal)
-- Clock frequency f = 250 MHz
-- Total cell count: 2,500 cells (AREA_0 strategy)
-- Estimated capacitance: ~50 fF per cell average
+**Nominal (typical) total power: 5.18 mW**
 
-Estimated dynamic power ≈ 0.1 × 2500 × 50fF × (1.8)² × 250MHz
-                         ≈ 0.1 × 2500 × 50e-15 × 3.24 × 250e6
-                         ≈ **10.1 mW (estimated)**
+---
 
-Static leakage power for Sky130A at nominal corner:
-  ~1 nW per cell × 2500 cells ≈ **2.5 μW (leakage)**
+## Design Metrics (from metrics.csv)
 
-## Plan for M4
+| Metric | Value |
+|--------|-------|
+| Die area | 0.0578 mm² |
+| Core utilization | 45.7% |
+| Total cells (post-PnR) | 7,079 |
+| Wire length | 53,156 µm |
+| Vias | 17,389 |
+| Critical path | 4.79 ns |
+| Worst negative slack (WNS) | -3.52 ns |
+| Suggested clock period | 14.0 ns (71.4 MHz) |
 
-For M4, power estimation will be attempted using:
-1. OpenLane full PnR flow to generate a placed and routed netlist
-2. OpenSTA power analysis on the post-PnR netlist
-3. If full PnR fails, use Yosys power estimation from gate-level netlist
+---
 
-The estimated 10.1 mW dynamic power will be validated against the
-post-PnR OpenSTA result in M4.
+## Timing Violation Note
+
+The full PnR flow completed all 44 steps including routing, DRC check
+(0 violations), and LVS (0 errors), but reported setup timing violations
+at the 4.0 ns (250 MHz) clock target. The worst negative slack is
+-3.52 ns, and the tool suggests a clock period of 14.0 ns (71.4 MHz)
+for the current implementation. This indicates the critical path through
+the av_unit 32-bit multiplier is too long for 250 MHz without additional
+pipelining. See critical_path.md for the fix plan.
+
+---
+
+## Power Summary
+
+The design consumes approximately **5.18 mW** total at typical corner,
+with 3.40 mW internal (65.6%) and 1.78 mW switching (34.4%). Leakage
+is negligible at 15 nW. This is a reasonable power level for a
+synthesized attention accelerator pipeline on Sky130A at 71.4 MHz.

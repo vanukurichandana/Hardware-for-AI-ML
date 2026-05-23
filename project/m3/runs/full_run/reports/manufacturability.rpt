@@ -1,0 +1,19 @@
+Design Name: top
+Run Directory: /design/runs/full_run
+----------------------------------------
+
+Magic DRC Summary:
+Source: /design/runs/full_run/reports/signoff/drc.rpt
+Total Magic DRC violations is 0
+----------------------------------------
+
+LVS Summary:
+Source: /design/runs/full_run/logs/signoff/41-top.lef.lvs.log
+Number of nets: 2714                       |Number of nets: 2714                       
+Design is LVS clean.
+----------------------------------------
+
+Antenna Summary:
+Source: /design/runs/full_run/logs/signoff/44-arc.log
+Pin violations: 0
+Net violations: 0

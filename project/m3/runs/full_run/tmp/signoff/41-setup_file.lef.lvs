@@ -1,0 +1,1 @@
+lvs {/design/runs/full_run/results/signoff/top.spice top} {/design/runs/full_run/tmp/signoff/38-top.pnl.v top} /root/.volare/volare/sky130/versions/bdc9412b3e468c102d01b7cf6337be06ec6e9c9a/sky130A/libs.tech/netgen/sky130A_setup.tcl /design/runs/full_run/logs/signoff/41-top.lef.lvs.log -json
