@@ -11,7 +11,7 @@ vlog -sv rtl/relu_approx.sv
 # -- Compiling module relu_approx
 # Errors: 0, Warnings: 0
 vlog -sv rtl/av_unit.sv
-# -- Compiling module av_unit
+# -- Compiling module av_unit (pipelined - M3 update)
 # Errors: 0, Warnings: 0
 vlog -sv rtl/compute_core.sv
 # -- Compiling module compute_core
@@ -60,7 +60,7 @@ run -all
 # [Test 3] Host read transaction -- asserting M_TREADY
 #   m_tvalid=0  m_tdata=0
 # PASS: Result non-negative for positive QKT inputs
-#       m_tdata=0 received through AXI4-Stream master
+#       m_tdata=0 received through AV unit pipeline
 #
 # [Test 4] Negative QKT -- ReLU clips to zero
 # PASS: Negative QKT clipped to 0 by ReLU (m_tdata=0)

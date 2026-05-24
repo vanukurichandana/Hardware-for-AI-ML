@@ -10,28 +10,28 @@ cModel Technology
 Z0 dC:/Users/vanuk/OneDrive/Documents/ECE-PSU/Term5 Spring 2026/Hardware-for-AI-ML/project/m3
 vav_unit
 Z1 DXx6 sv_std 3 std 0 22 AD7iAPLo6nTIKk<N0eo=D3
-Z2 !s110 1779506246
+Z2 !s110 1779660003
 !i10b 1
-!s100 @_HRf?=ofda[NFEC6Qcm50
-I]U47G5hg6ChNW_B]jMe3b3
+!s100 kH<mN?Zeg>oMj1;1iRSSF3
+I?bEK9:5Cn1oRGBYQl`gl83
 Z3 VDg1SIo80bB@j0V0VzS_@n1
 !s105 av_unit_sv_unit
 S1
 R0
-w1777854152
+w1779658953
 8rtl/av_unit.sv
 Frtl/av_unit.sv
-Z4 L0 25
-Z5 OV;L;10.5b;63
+L0 32
+Z4 OV;L;10.5b;63
 r1
 !s85 0
 31
-Z6 !s108 1779506246.000000
+Z5 !s108 1779660003.000000
 !s107 rtl/av_unit.sv|
-!s90 -reportprogress|300|-sv|rtl/av_unit.sv|
+!s90 -sv|rtl/av_unit.sv|
 !i113 1
 o-sv
-Z7 tCvgOpt 0
+Z6 tCvgOpt 0
 vcompute_core
 R1
 R2
@@ -46,16 +46,16 @@ w1777853991
 8rtl/compute_core.sv
 Frtl/compute_core.sv
 L0 30
-R5
+R4
 r1
 !s85 0
 31
-R6
+R5
 !s107 rtl/compute_core.sv|
-!s90 -reportprogress|300|-sv|rtl/compute_core.sv|
+!s90 -sv|rtl/compute_core.sv|
 !i113 1
 o-sv
-R7
+R6
 vinterface_axi4s
 R1
 R2
@@ -70,19 +70,19 @@ w1777852199
 8rtl/interface.sv
 Frtl/interface.sv
 L0 43
-R5
+R4
 r1
 !s85 0
 31
-R6
+R5
 !s107 rtl/interface.sv|
-!s90 -reportprogress|300|-sv|rtl/interface.sv|
+!s90 -sv|rtl/interface.sv|
 !i113 1
 o-sv
-R7
+R6
 vmac_unit
 R1
-Z8 !s110 1779506245
+Z7 !s110 1779660002
 !i10b 1
 !s100 dC294iPP6Eb6SPQ2G]A>C3
 I6J5^l6R8j<4b8b7OAm7oM0
@@ -93,20 +93,20 @@ R0
 w1777854032
 8rtl/mac_unit.sv
 Frtl/mac_unit.sv
+L0 25
 R4
-R5
 r1
 !s85 0
 31
-Z9 !s108 1779506245.000000
+Z8 !s108 1779660002.000000
 !s107 rtl/mac_unit.sv|
-!s90 -reportprogress|300|-sv|rtl/mac_unit.sv|
+!s90 -sv|rtl/mac_unit.sv|
 !i113 1
 o-sv
-R7
+R6
 vrelu_approx
 R1
-R2
+R7
 !i10b 1
 !s100 :[W0WndCK5c`zN?1Q2kbF3
 ImiAWi9:cc1k>Qg]c5GLN20
@@ -118,19 +118,19 @@ w1777854113
 8rtl/relu_approx.sv
 Frtl/relu_approx.sv
 L0 26
-R5
+R4
 r1
 !s85 0
 31
-R6
+R8
 !s107 rtl/relu_approx.sv|
-!s90 -reportprogress|300|-sv|rtl/relu_approx.sv|
+!s90 -sv|rtl/relu_approx.sv|
 !i113 1
 o-sv
-R7
+R6
 vscale_unit
 R1
-R8
+R7
 !i10b 1
 !s100 1RH??49E4ZY8P:NWEIL:^3
 IgXWdjRCL4a9]OZWaLYe_G3
@@ -142,19 +142,19 @@ w1777854062
 8rtl/scale_unit.sv
 Frtl/scale_unit.sv
 L0 22
-R5
+R4
 r1
 !s85 0
 31
-R9
+R8
 !s107 rtl/scale_unit.sv|
-!s90 -reportprogress|300|-sv|rtl/scale_unit.sv|
+!s90 -sv|rtl/scale_unit.sv|
 !i113 1
 o-sv
-R7
+R6
 vtb_top
 R1
-!s110 1779506257
+R2
 !i10b 1
 !s100 lPmQDTfNWT2>m28nLg?]J0
 I`9?MOlLFJ`WYZAfCHmcWF0
@@ -165,20 +165,20 @@ R0
 w1779505834
 8tb/tb_top.sv
 Ftb/tb_top.sv
-Z10 L0 35
-R5
+Z9 L0 35
+R4
 r1
 !s85 0
 31
-!s108 1779506257.000000
+R5
 !s107 tb/tb_top.sv|
-!s90 -reportprogress|300|-sv|tb/tb_top.sv|
+!s90 -sv|tb/tb_top.sv|
 !i113 1
 o-sv
-R7
+R6
 vtop
 R1
-!s110 1779506247
+R2
 !i10b 1
 !s100 fFQ>bfDnbOZ6A_HUF^^290
 ID77bPD=8hY7MOK@GKa^771
@@ -189,14 +189,14 @@ R0
 w1779505543
 8rtl/top.sv
 Frtl/top.sv
-R10
-R5
+R9
+R4
 r1
 !s85 0
 31
-!s108 1779506247.000000
+R5
 !s107 rtl/top.sv|
-!s90 -reportprogress|300|-sv|rtl/top.sv|
+!s90 -sv|rtl/top.sv|
 !i113 1
 o-sv
-R7
+R6

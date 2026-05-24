@@ -1,6 +1,0 @@
-{
-    "DESIGN_NAME": "top",
-    "VERILOG_FILES": ["dir::rtl/top.sv", "dir::rtl/interface.sv", "dir::rtl/compute_core.sv", "dir::rtl/mac_unit.sv", "dir::rtl/scale_unit.sv", "dir::rtl/relu_approx.sv", "dir::rtl/av_unit.sv"],
-    "CLOCK_PORT": "clk",
-    "CLOCK_PERIOD": 4.0
-}

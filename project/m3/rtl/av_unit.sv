@@ -7,7 +7,14 @@
 //   Attention-weighted Value (AV) accumulation unit. Multiplies the
 //   attention weight (from relu_approx) with the V matrix element and
 //   accumulates the result into a 32-bit signed register.
-//   Result is right-shifted by SCALE_SHIFT to prevent overflow.
+//
+//   M3 UPDATE: Added intermediate pipeline register between multiply and
+//   accumulate to break the critical path. This splits the long
+//   32-bit x 32-bit multiply + accumulate into two shorter pipeline stages,
+//   targeting 250 MHz (4.0 ns) clock on Sky130A.
+//
+//   Stage A: weight_in x v_extended → product_reg (registered)
+//   Stage B: product_reg >> SCALE_SHIFT + av_accum → av_accum (registered)
 //
 // Clock domain : Single clock domain (clk). No clock crossings.
 // Reset        : Synchronous, active-high.
@@ -36,21 +43,38 @@ module av_unit #(
     output logic                           valid_out
 );
 
+    // ── Stage A: Multiply weight x V (registered) ─────────────────────────────
     logic signed [ACCUM_WIDTH-1:0] v_extended;
+    logic signed [ACCUM_WIDTH-1:0] product_reg;
+    logic                          valid_a;
+
+    always_ff @(posedge clk) begin
+        if (rst) begin
+            v_extended  <= '0;
+            product_reg <= '0;
+            valid_a     <= 1'b0;
+        end else if (valid_in) begin
+            v_extended  <= {{(ACCUM_WIDTH-DATA_WIDTH){v_in[DATA_WIDTH-1]}}, v_in};
+            product_reg <= weight_in *
+                           {{(ACCUM_WIDTH-DATA_WIDTH){v_in[DATA_WIDTH-1]}}, v_in};
+            valid_a     <= 1'b1;
+        end else begin
+            valid_a     <= 1'b0;
+        end
+    end
+
+    // ── Stage B: Right shift and accumulate ───────────────────────────────────
     logic signed [ACCUM_WIDTH-1:0] av_accum;
 
     always_ff @(posedge clk) begin
         if (rst) begin
-            v_extended <= '0;
-            av_accum   <= '0;
-            valid_out  <= 1'b0;
-        end else if (valid_in) begin
-            v_extended <= {{(ACCUM_WIDTH-DATA_WIDTH){v_in[DATA_WIDTH-1]}}, v_in};
-            av_accum   <= av_accum +
-                          ((weight_in * v_extended) >>> SCALE_SHIFT);
-            valid_out  <= 1'b1;
+            av_accum  <= '0;
+            valid_out <= 1'b0;
+        end else if (valid_a) begin
+            av_accum  <= av_accum + (product_reg >>> SCALE_SHIFT);
+            valid_out <= 1'b1;
         end else begin
-            valid_out  <= 1'b0;
+            valid_out <= 1'b0;
         end
     end
 

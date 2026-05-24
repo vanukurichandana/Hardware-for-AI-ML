@@ -1,5 +1,5 @@
 $date
-	Fri May 22 20:18:06 2026
+	Sun May 24 14:48:45 2026
 $end
 $version
 	ModelSim Version 10.5b
@@ -318,7 +318,9 @@ $var wire 1 A" valid_in $end
 $var reg 32 B" result_out [31:0] $end
 $var reg 1 C" valid_out $end
 $var reg 32 D" v_extended [31:0] $end
-$var reg 32 E" av_accum [31:0] $end
+$var reg 32 E" product_reg [31:0] $end
+$var reg 1 F" valid_a $end
+$var reg 32 G" av_accum [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
@@ -370,6 +372,8 @@ bx B"
 xC"
 bx D"
 bx E"
+xF"
+bx G"
 bx b
 xc
 bx .
@@ -565,6 +569,8 @@ b0 z!
 0{!
 b0 D"
 b0 E"
+0F"
+b0 G"
 0C"
 b0 b
 0c
@@ -1003,15 +1009,23 @@ b1 *!
 1"
 16
 0{!
-1C"
-1%!
+1F"
 0+!
-1a
 0A"
 #100000
 0"
 06
 #105000
+1"
+16
+0F"
+1C"
+1%!
+1a
+#110000
+0"
+06
+#115000
 1"
 16
 0C"
@@ -1021,12 +1035,6 @@ b1 *!
 0a
 1S
 1(
-#110000
-0"
-06
-#115000
-1"
-16
 #120000
 0"
 06
@@ -1250,15 +1258,23 @@ b0 ]
 1"
 16
 0{!
-1C"
-1%!
+1F"
 0+!
-1a
 0A"
 #290000
 0"
 06
 #295000
+1"
+16
+0F"
+1C"
+1%!
+1a
+#300000
+0"
+06
+#305000
 1"
 16
 0C"
@@ -1268,12 +1284,6 @@ b0 ]
 0a
 1S
 1(
-#300000
-0"
-06
-#305000
-1"
-16
 #310000
 0"
 06
