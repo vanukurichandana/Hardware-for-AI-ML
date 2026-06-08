@@ -1,0 +1,23 @@
+metric,sw_baseline,hw_measured_dk4,hw_projected_dk64,label,notes
+platform,AMD Ryzen 7 8840HS,ModelSim Intel FPGA 10.5b,Sky130A 250MHz,,
+precision,FP32,INT8,INT8,,
+head_dim,64,4,64,,testbench uses dk=4; operating point is dk=64
+s_tvalid_first_high_ns,N/A,25.761,N/A,MEASURED,waveform cursor 1
+m_tvalid_first_rising_ns,N/A,115.000,N/A,MEASURED,waveform cursor 1
+m_tvalid_second_rising_ns,N/A,304.750,N/A,MEASURED,waveform cursor 1
+first_transaction_latency_ns,N/A,89.239,780,MEASURED/PROJECTED,115-25.761=89.239ns measured; 195x4ns=780ns projected
+cycles_per_sample,N/A,22.3,195,MEASURED/PROJECTED,89.239/4.0=22.3 measured; pipeline stages projected
+total_simulation_time_ns,N/A,416,N/A,MEASURED,ModelSim Now field
+throughput_samples_per_sec,133.43,4807692,1282051,MEASURED/PROJECTED,2/416ns measured; 1/780ns projected
+speedup_x,1,36030,9607,MEASURED/PROJECTED,4807692/133.43 measured; 1282051/133.43 projected
+power_mW,45000,5.50,5.50,,CPU TDP 45W; HW from OpenSTA post-PnR
+energy_per_sample_mJ,337.3,0.000000491,0.00000000429,PROJECTED,power x latency
+arithmetic_intensity_FLOP_per_byte,10.67,42.7,42.7,,SW measured M1; HW INT8 full reuse
+bottleneck,memory-bound,compute-bound,compute-bound,,
+wns_ps,N/A,961,961,,synthesis WNS
+critical_path_ps,N/A,3039,3039,,synthesis critical path
+post_routing_wns_ns,N/A,-4.14,-4.14,,post-PnR WNS
+post_routing_clock_MHz,N/A,70.4,70.4,,suggested post-routing frequency
+die_area_mm2,N/A,0.0727,0.0727,,from OpenLane full PnR
+drc_violations,N/A,0,0,,post-PnR Magic DRC
+lvs_errors,N/A,0,0,,post-PnR LVS

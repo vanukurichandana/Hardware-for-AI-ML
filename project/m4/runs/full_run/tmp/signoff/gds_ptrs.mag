@@ -1,0 +1,6 @@
+<< properties >>
+string FIXED_BBOX 0 0 52858 55002
+string GDS_END 8829296
+string GDS_FILE /design/runs/full_run/results/signoff/top.magic.gds
+string GDS_START 1002290
+<< end >>
