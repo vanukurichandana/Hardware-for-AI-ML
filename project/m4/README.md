@@ -83,10 +83,10 @@ the full HEAD_DIM=64 operating point.
 | File | Description | Checklist |
 |------|-------------|-----------|
 | `report/design_justification.pdf` | 9-section design justification report | Section 5 |
-| `report/figures/roofline_final.png` | Fig 1 — Roofline model | Section 5 |
-| `report/figures/dataflow_diagram.png` | Fig 2 — Output-stationary dataflow | Section 5 |
-| `report/figures/block_diagram.png` | Fig 3 — System block diagram | Section 5 |
-| `report/figures/final_waveform.png` | Fig 4 — End-to-end waveform | Section 5 |
+| `report/figures/fig1_roofline_final.png` | Fig 1 — Roofline model | Section 5 |
+| `report/figures/fig2_dataflow_diagram.png` | Fig 2 — Output-stationary dataflow | Section 5 |
+| `report/figures/fig3_block_diagram.png` | Fig 3 — System block diagram | Section 5 |
+| `report/figures/fig4_final_waveform.png` | Fig 4 — End-to-end waveform | Section 5 |
 
 ---
 
@@ -122,7 +122,37 @@ vsim tb_top
 run -all
 ```
 
-Expected: OVERALL: PASS (5/5 tests)
+Expected output: `OVERALL: PASS (5/5 tests)`
+
+---
+
+## How to Reproduce Waveform
+
+After running simulation above, add signals and zoom to view full transaction:
+
+```
+add wave -divider "HOST->DUT"
+add wave /tb_top/clk
+add wave /tb_top/rst
+add wave /tb_top/s_tvalid
+add wave /tb_top/s_tready
+add wave /tb_top/s_tdata
+add wave /tb_top/s_tlast
+add wave -divider "DUT->HOST"
+add wave /tb_top/m_tvalid
+add wave /tb_top/m_tready
+add wave /tb_top/m_tdata
+run -all
+wave zoom range 0ns 450ns
+```
+
+The waveform shows:
+- s_tvalid first HIGH at 25.761 ns (start of transaction)
+- m_tvalid first rising edge at 115.000 ns (first result)
+- Total simulation time: 416 ns (2 complete transactions)
+- Measured latency: 89.239 ns = 22.3 cycles at 250 MHz
+
+The committed waveform screenshot is at `sim/final_waveform.png`.
 
 ---
 
