@@ -43,19 +43,46 @@ The design implements a 4-stage pipeline — QKT MAC, scale, ReLU softmax, and A
 
 ## Repository Structure
 
-| Folder | Description |
-|--------|-------------|
-| `project/m1/` | SW profiling, roofline, interface selection |
-| `project/m2/` | RTL design, module-level verification |
-| `project/m3/` | Integration, full PnR, timing optimization |
-| `project/m4/` | **M4 final submission** |
-| `project/m4/rtl/` | SystemVerilog source files |
-| `project/m4/tb/` | Testbench |
-| `project/m4/sim/` | Simulation logs and waveforms |
-| `project/m4/synth/` | OpenLane synthesis and PnR reports |
-| `project/m4/bench/` | Benchmark results and roofline |
-| `project/m4/report/` | Design justification PDF and figures |
-| `codefest/` | Weekly codefest deliverables (CF01-CF09) |
+```
+Hardware-for-AI-ML/
+├── README.md                        ← you are here
+├── project/
+│   ├── m1/                          ← SW profiling, roofline, interface selection
+│   ├── m2/                          ← RTL design, module-level verification
+│   ├── m3/                          ← Integration, full PnR, timing optimization
+│   └── m4/                          ← M4 FINAL SUBMISSION
+│       ├── README.md                ← M4 file catalog
+│       ├── rtl/                     ← SystemVerilog source files
+│       │   ├── top.sv
+│       │   ├── compute_core.sv
+│       │   ├── interface.sv
+│       │   ├── mac_unit.sv
+│       │   ├── scale_unit.sv
+│       │   ├── relu_approx.sv
+│       │   └── av_unit.sv
+│       ├── tb/
+│       │   └── tb_top.sv            ← End-to-end testbench
+│       ├── sim/
+│       │   ├── final_run.log        ← 5/5 PASS simulation log
+│       │   └── final_waveform.png   ← Annotated waveform
+│       ├── synth/
+│       │   ├── config.json          ← OpenLane configuration
+│       │   ├── timing_report.txt    ← WNS, critical path
+│       │   ├── area_report.txt      ← Cell counts, area
+│       │   └── power_report.txt     ← 5.50 mW OpenSTA
+│       ├── bench/
+│       │   ├── benchmark.md         ← SW vs HW comparison
+│       │   ├── benchmark_data.csv   ← Raw measurement data
+│       │   └── roofline_final.png   ← Final roofline plot
+│       └── report/
+│           ├── design_justification.pdf  ← 9-section report
+│           └── figures/
+│               ├── fig1_roofline_final.png
+│               ├── fig2_dataflow_diagram.png
+│               ├── fig3_block_diagram.png
+│               └── fig4_final_waveform.png
+└── codefest/                        ← Weekly deliverables CF01-CF09
+```
 
 ---
 
